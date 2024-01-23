@@ -1,0 +1,37 @@
+.button {
+    color: white; 
+    font-size: 40px; 
+    font-family: Inria Serif;  
+    font-weight: 400; 
+    word-wrap: break-word;
+    position: absolute;
+}
+.Rectangle2{
+    width: 208px; height: 51px; left: 70px; top: 44px; position: absolute; background: #272D47
+}
+.Rectangle5{
+    width: 219px; height: 51px; left: 946px; top: 622px; position: absolute; background: #272D47
+}
+.Rectangle6{
+    outline:0; font-size: 30px; font-family: Inria Serif; color: #272D47;  width: 672px; height: 47px; left: 274px; top: 622px; position: absolute; background: white
+}
+.Rectangle5:hover{
+    background-color:  white;
+    color: #272D47;
+    cursor: pointer;
+}
+#buscar {
+    width: 177px; left: 988px; top: 622px;
+}
+#avancar {
+    left: 1157px; top: 44px; 
+}
+#voltar {
+    left: 869px; top: 44px;
+}
+#enviar {
+    left: 121px; top: 44px;
+}
+#file{
+    display: none;
+}
