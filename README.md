@@ -8,3 +8,14 @@ This page is used to upload a new dataset to the local server. Uses mongoDB.
 <img src="https://github.com/lorenzoppx/Website/blob/main/print_pages/pesquisar_page.png" width="600">
 <p />
 This page is used to download a desirable dataset of the local server. Uses mongoDB.
+For dev debugger while programming is recommend to use this command:
+``` shell
+  npm run devStart or npm run download
+```
+And edit the package.json file adding this:
+``` shell
+  "scripts": {
+    "devStart": "nodemon scripts.js",
+    "download": "nodemon download.js"
+  }
+```
