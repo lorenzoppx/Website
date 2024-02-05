@@ -1,0 +1,36 @@
+{
+  "scripts": {
+    "devStart": "nodemon scripts.js",
+    "download": "nodemon download.js"
+  },
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
+  },
+  "dependencies": {
+    "fast-csv": "^5.0.0",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.1.1",
+    "react": "^18.2.0",
+    "reactify": "^1.1.1"
+  },
+  "name": "website",
+  "version": "1.0.0",
+  "main": "enviar.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lorenzoppx/Website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lorenzoppx/Website/issues"
+  },
+  "homepage": "https://github.com/lorenzoppx/Website#readme",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
