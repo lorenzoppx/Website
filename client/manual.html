@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="./resources/css/pesquisar.css">
+<link rel="stylesheet" href="./resources/css/style.css">
+<link rel="icon" href="./resources/images/labic.ico">
+<title>Página Inicial - Pesquisar</title>
+
+<html>
+    <center>
+        <body>
+            <nav style="background-color: #D9D9D9; height: 30px;">
+                <ul class="left-breadcrumb">
+                    <h3 style='font-weight: normal; font-size: 20px;  color:#626368; text-align:left; font-family: Geneva;'>Version 1a</h3>
+                </ul>
+            </nav>
+            <nav style="background-color: white; height:100px;">
+                <section>
+                    <ul class="left-section">
+                        <li class="pp">Sistema Integrado de Dados</li>
+                    </ul>
+                    <ul class="right-section" style="padding-left: 45%; padding-top: 1%;">
+                        <li class="listContact">
+                            <div class="icon1">
+                                <img src="./resources/icons/loginIcon.png" style="width:50px; height:50px" alt="">
+                            </div>
+                            <p class="pp1">Contato Dev</p>
+                            <p class="pp2">lorenzopx@gmail.com</p>
+                        </li>
+                    </ul>
+                </section>
+
+            </nav>
+            <nav style="height:100px; width:100%; ">
+                <button class="button navigation" id="enviar" style=" left: 50px;  position: absolute;" onclick="Redirect()">Enviar</button>
+                <button class="button navigation" id="manual" style=" left: 250px;  position: absolute;" >Manual</button>
+                <button class="button navigation" id="voltar" style=" left: 450px;  position: absolute;" onclick="history.back()">&laquo;</button>
+                <button class="button navigation" id="avancar" style=" left: 650px;  position: absolute;" onclick="history.forward()">&raquo;</button>
+            </nav>
+            <br>
+            <h3> 
+                O menino de vó
+            </h3>
+            <div class="Desktop1" style="display: flex; align-items: center; justify-content: center; width: 2440px; height: 1440px; position: relative;">
+                <body>
+
+                    <!--
+                    <button class="button" onclick="printData()" id="button4" style="width: 1000px; left:270px; top: 1200px; position: absolute;">Buscar</button>
+                    <h1 id="dataprint"></h1>
+                    -->
+
+                    <button class="button" onclick="printContent()" id="button2" style="opacity: 0; width: 1000px; left:270px; top: 900px; position: absolute;">Buscar</button>
+                    <h1 style="opacity: 0;" id="content" name="content"></h1>
+                    <button class="button" onclick="printDatasets()" id="button2" style="opacity: 0; width: 1000px; left:270px; top: 1000px; position: absolute;">Buscar</button>
+                    <h1 style="opacity: 0;" id="datasets" name="datasets"></h1>
+
+                    <script src="../node_modules/axios/dist/axios.min.js"></script>
+                    <script type="text/javascript" src="./pesquisar.js"></script>
+
+                </body>
+            </div>
+            
+            <footer>
+                <div class="Rodape" style="width: 100%; height: 75px; top: 95%; opacity:0.3; position: relative; transform: rotate(-180deg); background: linear-gradient(180deg, #D9D9D9 0%, rgba(217, 217, 217, 0.00) 100%);"></div>  
+                <hr style="width:20%; border-top:1% solid white;" class="slds-m-left_small slds-m-right_small"></hr>
+                <div class="Rodape3" style="width: 100%; height: 150px; top: 95%; opacity:1.0; position: relative; background: #272D47;">
+                    <h2 style="display: flex; align-items: center; justify-content: center; color:#D9D9D9;"> Desenvolvido por lorenzoppx</h2>
+                </div>
+            </footer>
+        </body>
+    </center>
+</html>

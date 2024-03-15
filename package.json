@@ -1,7 +1,10 @@
 {
   "scripts": {
     "devStart": "nodemon scripts.js",
-    "download": "nodemon download.js"
+    "download": "nodemon download.js",
+    "api": "nodemon ./server/api.js",
+    "index2": "nodemon index2.js",
+    "watch" : "npx watchify ./client/enviar.js -o ./client/dist/bundle.js"
   },
   "browserify": {
     "transform": [
@@ -9,11 +12,22 @@
     ]
   },
   "dependencies": {
+    "axios": "^1.6.7",
+    "body-parser": "^1.20.2",
+    "buffer": "^6.0.3",
+    "buffer.min.js": "^1.2.3-0",
+    "connect-timeout": "^1.9.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
     "fast-csv": "^5.0.0",
+    "form-data": "^4.0.0",
+    "fs": "^0.0.1-security",
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.1",
+    "multer": "^1.4.5-lts.1",
     "react": "^18.2.0",
-    "reactify": "^1.1.1"
+    "reactify": "^1.1.1",
+    "requirejs": "^2.3.6"
   },
   "name": "website",
   "version": "1.0.0",
@@ -31,6 +45,7 @@
   "homepage": "https://github.com/lorenzoppx/Website#readme",
   "description": "",
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "watchify": "^4.0.0"
   }
 }

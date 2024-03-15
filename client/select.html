@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style2.css">
+    <title>Filter List</title>
+</head>
+
+<body>
+    <center>
+        <h1>GeeksforGeeks</h1>
+    </center>
+    <ul id="myList"></ul>
+    <!--
+    <script data-main="api" src="require.js"></script>
+    -->
+    <nav>
+        <ul class="leftnav">
+         <li>Home</li>
+         <li class="menu">About Us</li>
+         <li class="menu">Services</li>
+         <li class="menu">Projects</li>
+         <li class="menu">Pages</li>
+         <li><i class="arrow down opt"></i></li>
+         <li class="menu">Contact Us</li>
+        </ul>
+
+        <ul class="rightnav">
+        <li class="button">Pro Version</li>
+        </ul>
+       </nav>
+    <div class="container">
+        <input type="text" placeholder=" Search .." class="filter-input">
+        <div class="out"></div>
+        <div class="listProduct">
+        </div>
+    </div>
+
+    <button class="button" onclick="printContent()" id="button2">Buscar</button>
+    <h1 id="content" name="content"></h1>
+    <button class="button" onclick="printDatasets()" id="button2">Buscar</button>
+    <h1 id="datasets" name="datasets"></h1>
+
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="index2.js"></script>
+</body>
+
+</html>
