@@ -2,9 +2,12 @@
   "scripts": {
     "devStart": "nodemon scripts.js",
     "download": "nodemon download.js",
+    "watchdog": "nodemon ./client/watch.js",
     "api": "nodemon ./server/api.js",
     "index2": "nodemon index2.js",
-    "watch" : "npx watchify ./client/enviar.js -o ./client/dist/bundle.js"
+    "watchEnviar": "npx watchify ./client/enviar.js -o ./client/dist/enviar_bundle.js",
+    "watchGet": "npx watchify ./client/get.js -o ./client/dist/get_bundle.js",
+    "watchDownload": "npx watchify ./client/download.js -o ./client/dist/download_bundle.js"
   },
   "browserify": {
     "transform": [
@@ -16,12 +19,15 @@
     "body-parser": "^1.20.2",
     "buffer": "^6.0.3",
     "buffer.min.js": "^1.2.3-0",
+    "child-process": "^1.0.2",
     "connect-timeout": "^1.9.0",
     "cors": "^2.8.5",
+    "csv-writer": "^1.6.0",
     "express": "^4.18.2",
     "fast-csv": "^5.0.0",
     "form-data": "^4.0.0",
     "fs": "^0.0.1-security",
+    "hound": "^1.0.5",
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.1",
     "multer": "^1.4.5-lts.1",

@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const MongoClient = require('mongodb');
 const csv = require('fast-csv');
 const fs = require('fs');
 // or as an es module:
@@ -8,7 +8,9 @@ const url = 'mongodb://127.0.0.1:27017';
 const client = new MongoClient(url);
 // Database Name
 const dbName = 'testdb';
-const run = async () => {
+async function DownMongo()
+{
+    console.log(window.localStorage.getItem('pagina_inf'));
     try {
         await client.connect();
         console.log("db connected");
@@ -25,7 +27,8 @@ const run = async () => {
         }, {
             $limit: 50000
         }]
-        const cursor = db.collection('users').aggregate(pipelineStages)
+        var collect = 'users';
+        const cursor = db.collection(collect).aggregate(pipelineStages);
         const csvStream = csv.format({ headers: true });
         const writeStream = fs.createWriteStream('./myfile.csv');
         csvStream.pipe(writeStream).on('end', () => {
@@ -45,4 +48,9 @@ const run = async () => {
     }
 
 }
-run();
+function printMongo(){
+    var dataset = window.localStorage.getItem('pagina_inf');
+    alert(dataset);
+    console.log(dataset);
+    dataout.innerHTML=dataset;
+  }

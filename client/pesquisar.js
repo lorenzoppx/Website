@@ -61,9 +61,10 @@ async function filter(e) {
     listDatasetHTML.innerHTML = temp;
     if(result.length>0){
         //temp = `<ul class="list-items">`;
-        result.forEach((item) => {
+        result.slice(0,7).forEach((item) => {
                 let newItem = document.createElement('div');
-                newItem.dataset.id = `${item}_id`;
+                //newItem.dataset.id = `${item}_id`;
+                newItem.dataset.id = item;
                 newItem.classList.add('item');
                 listDatasetHTML.appendChild(newItem);       
                 newItem.innerHTML = `<li class="listDataset list-item"> ${item} </li>`;
@@ -83,9 +84,10 @@ async function loadList()
     
     //let temp = '<ul class="list-items">';
     let temp = '';
-    x.forEach(item => {
+    x.slice(0,7).forEach(item => {
             let newItem = document.createElement('div');
-            newItem.dataset.id = `${item}_id`;
+            //newItem.dataset.id = `${item}_id`;
+            newItem.dataset.id = item;
             newItem.classList.add('ul');
             listDatasetHTML.appendChild(newItem);       
             newItem.innerHTML = `<li class="listDataset list-item"> ${item} </li>`;

@@ -20,7 +20,6 @@ window.addEventListener('load', function () {
 //const out = document.querySelector('.out');
 const search = document.querySelector(".filter-input");
 
-window.addEventListener('DOMContentLoaded',loadList);
 
 search.addEventListener("input", filter);
 
@@ -34,6 +33,40 @@ function printData(){
   alert(dataset);
   console.log(dataset);
   dataout.innerHTML=dataset;
+}
+async function DownMongo(){
+    var dataset = window.localStorage.getItem('pagina_inf');
+    const link = `http://localhost:3001/export/${dataset}`;
+
+    //open download link in new page
+    window.open( link );
+
+    //redirect current page to success page
+    window.location="http://127.0.0.1:5500/client/pesquisar.html";
+    window.focus();
+    /*
+    try {
+        var dataset = window.localStorage.getItem('pagina_inf');
+        const link = `http://localhost:3001/export/${dataset}`;
+        console.log(link)
+        const response = await fetch(link);
+        const data = await response.json();
+        const posts = data.data.children.map(child => child.data);
+        console.log(posts.map(post => post.title));
+      } catch (error) {
+        console.log('uq')
+        console.error(error);
+      }
+      */
+    /*
+    var dataset = window.localStorage.getItem('pagina_inf');
+    alert(dataset);
+    console.log(dataset);
+    const link = `http://localhost:3001/export/${dataset}`;
+    //window.open(link,'_self');
+    window.location.assign(link);
+    //dataout.innerHTML=dataset;
+    */
 }
 
 async function printDatasets()
@@ -51,17 +84,18 @@ async function printDatasets()
 
 function printContent()
 {
-    axios.get('http://127.0.0.1:3001/getUsers')
+    var dataset = window.localStorage.getItem('pagina_inf');
+    axios.get(`http://localhost:3001/getline/${dataset}`)
     .then(resp => {
         console.log(resp.data);
         var pendingWrites = [];
-        for (let i = 0, endAt = Object.keys(resp.data).length; i < endAt; i++) {
-            let thisWrite = 'Twitter: Name:' + resp.data[i].name + '\t\tAge:' + resp.data[i].age;
+        for (let i = 0, endAt = 2; i < endAt; i++) {
+            let thisWrite = 'Twitter:' + resp.data[i].text + '\t\tUser:' + resp.data[i].from_user;
             console.log(resp.data[i]);
             pendingWrites.push(thisWrite);
         }
         var str = '<ul style="list-style:none;">';
-        for(let i=0, endAt=parseInt(pendingWrites.length/4); i<endAt; i++){
+        for(let i=0, endAt=parseInt(pendingWrites.length); i<endAt; i++){
             str = str + '<li>' + pendingWrites[i] + '<li>';
         }
         str = str + '<ul>';
@@ -70,7 +104,22 @@ function printContent()
     })
     .catch(e => console.log(e));
 }
-
+/*
+function printContent()
+{
+    axios.get('http://127.0.0.1:3001/getline/new3')
+    .then(resp => {
+        console.log(resp.data);
+        let thisWrite = 'Twitter:' + resp.data.text;
+        var str = '<ul style="list-style:none;">';
+        str = str + '<li>' + thisWrite + '<li>';
+        str = str + '<ul>';
+        console.log(str);
+        content.innerHTML = str;
+    })
+    .catch(e => console.log(e));
+}
+*/
 async function filter(e) {
 
     var x = await printDatasets();
@@ -81,7 +130,8 @@ async function filter(e) {
         //temp = `<ul class="list-items">`;
         result.forEach((item) => {
                 let newItem = document.createElement('div');
-                newItem.dataset.id = `${item}_id`;
+                //newItem.dataset.id = `${item}_id`;
+                newItem.dataset.id = item;
                 newItem.classList.add('item');
                 listDatasetHTML.appendChild(newItem);       
                 newItem.innerHTML = `<li class="listDataset list-item"> ${item} </li>`;
@@ -92,31 +142,7 @@ async function filter(e) {
     }
     
 }
-
-async function loadList()
-{
-    var x = await printDatasets();
-    console.log(typeof(x));
-    console.log(x);
-    
-    //let temp = '<ul class="list-items">';
-    let temp = '';
-    x.forEach(item => {
-            let newItem = document.createElement('div');
-            newItem.dataset.id = `${item}_id`;
-            newItem.classList.add('ul');
-            listDatasetHTML.appendChild(newItem);       
-            newItem.innerHTML = `<li class="listDataset list-item"> ${item} </li>`;
-        });
-    //temp+='</ul>';
-    console.log(temp);
-
-
-    //out.innerHTML = temp;
-    //const u = document.getElementById('rt');
-    //u.innerText='RTS'
-}
-
+/*
 listDatasetHTML.addEventListener('click', (event) => {
     console.log('click');
     let positionClick = event.target;
@@ -132,7 +158,7 @@ listDatasetHTML.addEventListener('click', (event) => {
         pagina.innerText=id_dataset;
     }
 })
-
+*/
 function addToMem(id_dataset)
 {
     let positionThisProductInCart = dataset.findIndex((value) => value.id_dataset == id_dataset);
