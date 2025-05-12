@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Result Page</title>
+</head>
+<body>
+  <h1>Result Page</h1>
+  <pre id="resultContainer"></pre>
+
+  <script>
+    const rawData = sessionStorage.getItem('hasuraData');
+    if (rawData) {
+      const data = JSON.parse(rawData);
+      document.getElementById('resultContainer').textContent = JSON.stringify(data, null, 2);
+    } else {
+      document.getElementById('resultContainer').textContent = 'No data found.';
+    }
+  </script>
+</body>
+</html>

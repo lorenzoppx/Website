@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const UserModel = require('./User.js');
 let fs = require('fs'); 
-
+const { spawn } = require('child_process');
+const path = require('path');
+const Busboy = require('@fastify/busboy');
 const mongodb = require("mongodb");
-
-const csv = require('fast-csv');
+const timeout = require('connect-timeout');
 
 const bodyParser = require('body-parser');
 const app = express();
@@ -115,7 +116,184 @@ app.get('/getline/:collectionID', (req,res) => {
       
 });
 
-app.post('/csv', (req, res, next) => {
+
+app.post('/clip1', (req, res, next) => {
+    //console.log(req.body); // This will log the parsed JSON
+    //console.log(req.body['firstName']);
+    console.log(req.complete); 
+    console.log(req.body);
+    
+    console.log("User received!");
+    console.log(req.headers['name']);
+    const ext = path.extname(req.headers['name']);
+    //res.send('User received!');
+    //fs.appendFileSync('./csv/_myImage_' + '-' + Date.now() + '.csv', Buffer.from(arrayBuffer));
+    
+    console.log(req.body.img);
+    
+    const imagePath = './jpg/myImage' + '-' + Date.now() + ext;
+    console.log(imagePath);
+    
+    // Read and display the file data on console
+    //console.log(req.body.csv);
+    
+    //writer.write(req.body.img);
+    
+    // Respond with success message and the embedding
+    //res.json({message: 'CSV received and saved successfully.',//filename: fileName,//embedding: embedding});
+    
+    // Call Python script to compute embedding
+    const python = spawn('python', ['./server/embed_img.py', imagePath]);
+    
+    let result = '';
+    python.stdout.on('data', data => result += data.toString());
+    
+    python.stderr.on('data', data => console.error(data.toString()));
+    
+    python.on('close', code => {
+        if (code === 0) {
+        //console.log(result);
+        res.status(200).json(JSON.parse(result));
+        } else {
+        res.status(500).send('Embedding failed.');
+        }
+    });
+    
+    
+    });
+
+const { IncomingForm } = require('formidable');
+app.use(cors());
+
+app.post('/clipss', (req, res) => {
+    const form = new IncomingForm({
+      multiples: false,
+      uploadDir: path.join(__dirname, './jpg'),
+      keepExtensions: true,
+      filename: (originalName, originalExt, part) => {
+        const headerName = req.headers['name'] || originalName || 'file.unknown';
+        const ext = path.extname(headerName) || originalExt || '.dat';
+        return `myImage-${Date.now()}${ext}`;
+      }
+    });
+  
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+          console.error('❌ Erro no upload:', err);
+          return res.status(500).send('Upload failed');
+        }
+    
+        const file = files.img;
+        if (!file) {
+          return res.status(400).send('No file uploaded');
+        }
+    
+        const filepath = Array.isArray(file) ? file[0].filepath : file.filepath;
+        console.log('✅ Arquivo salvo em:', filepath);
+    
+        const python = spawn('python', ['server/embed_img.py', filepath]);
+    
+        let result = '';
+        let pythonError = '';
+    
+        python.stdout.on('data', (data) => {
+          result += data.toString();
+        });
+    
+        python.stderr.on('data', (data) => {
+          pythonError += data.toString();
+          console.error('Python stderr:', data.toString());
+        });
+    
+        python.on('close', (code) => {
+          //fs.unlink(filepath, () => {}); // opcional: remove a imagem após o uso
+    
+          if (code !== 0) {
+            console.error('❌ Python script failed:', pythonError);
+            return res.status(500).send('Embedding generation failed');
+          }
+    
+          try {
+            const parsed = JSON.parse(result);
+            console.log(parsed)
+            res.status(200).json({ embedding: parsed });
+          } catch (e) {
+            console.error('❌ JSON parse error:', e);
+            res.status(500).send('Invalid Python output');
+          }
+        });
+      });
+    });
+
+app.use('/clip3', timeout('60s'));
+app.post('/clip3', (req, res, next) => {
+    const busboy = Busboy({ headers: req.headers });
+    let imagePath = '';
+    let fileExtension = '';
+
+    busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
+        console.log(`Receiving file: ${filename.filename}`);
+
+        fileExtension = path.extname(filename.filename);
+        imagePath = `./jpg/myImage-${Date.now()}${fileExtension}`;
+        
+        // Save the file
+        const writeStream = fs.createWriteStream(imagePath);
+        file.pipe(writeStream);
+    });
+
+    busboy.on('field', (fieldname, val) => {
+        console.log(`Received field ${fieldname}: ${val}`);
+    });
+
+    busboy.on('finish', () => {
+        console.log('File upload completed!');
+        
+        if (!imagePath) {
+            return res.status(400).send('No file uploaded.');
+        }
+
+        console.log('User received!');
+        console.log('Image path:', imagePath);
+
+        // Call Python script to compute embedding
+        const python = spawn('python', ['./server/embed_img.py', imagePath]);
+
+        let result = '';
+        python.stdout.on('data', data => result += data.toString());
+
+        python.stderr.on('data', data => {
+            console.error('Python script error:', data.toString());
+        });
+
+        python.on('close', code => {
+            // Clean up the saved image file
+            fs.unlink(imagePath, (err) => {
+                if (err) console.error('Error deleting file:', err);
+            });
+
+            if (code === 0) {
+                try {
+                    res.status(200).json(JSON.parse(result));
+                } catch (err) {
+                    res.status(500).send('Invalid response from Python script.');
+                }
+            } else {
+                res.status(500).send('Embedding failed.');
+            }
+        });
+    });
+
+    busboy.on('error', err => {
+        console.error('Busboy error:', err);
+        res.status(500).send('File upload failed.');
+    });
+
+    req.pipe(busboy);
+});
+
+/*
+app.post('/csv1', (req, res, next) => {
     //console.log(req.body); // This will log the parsed JSON
     //console.log(req.body['firstName']);
     console.log(req.complete); 
@@ -125,12 +303,88 @@ app.post('/csv', (req, res, next) => {
     //res.send('User received!');
     //fs.appendFileSync('./csv/_myImage_' + '-' + Date.now() + '.csv', Buffer.from(arrayBuffer));
 
-    let writer = fs.createWriteStream('../csv/myImage' + '-' + Date.now() + '.csv');
+    const imagePath = '../csv/myImage' + '-' + Date.now() + '.csv'
+    let writer = fs.createWriteStream(imagePath);
   
     // Read and display the file data on console
     console.log(req.body.csv);  
     writer.write(req.body.csv);
 });
+
+app.use('/clip30', timeout('30s'));
+app.post('/clip30', (req, res) => {
+    const nameHeader = req.headers['name'] || 'file.unknown';
+    const ext = path.extname(nameHeader) || '.dat';
+    const filename = 'myImage-' + Date.now() + ext;
+    const filepath = path.join(__dirname, './jpg', filename);
+    
+    let fileSaved = false;
+
+    const busboy = new Busboy({ headers: req.headers });
+
+    busboy.on('file', (fieldname, file, filename) => {
+        console.log(`Uploading ${filename}...`);
+        const writeStream = fs.createWriteStream(filepath);
+        file.on('data', () => console.log('Receiving file chunk...'));
+        file.pipe(writeStream);
+
+        writeStream.on('close', () => {
+            console.log('✅ Arquivo salvo em:', filepath);
+            fileSaved = true;
+        });
+
+        writeStream.on('error', (err) => {
+            console.error('Error saving file:', err);
+            if (!res.headersSent) {
+                res.status(500).send('Error saving file');
+            }
+        });
+    });
+    
+    busboy.on('error', (err) => {
+        console.error('Busboy error:', err);
+        if (!res.headersSent) {
+            res.status(500).send('Error processing upload');
+        }
+    });
+    
+    busboy.on('finish', () => {
+        //if (!fileSaved) {return res.status(400).send('No file was uploaded');}
+
+        const python1 = spawn('python', ['./server/embed_img.py', filepath]);
+        let result = '';
+        
+        python1.stdout.on('data', (data) => {
+            console.log('Python stdout:', data.toString());
+            result += data.toString();
+          });
+          
+          python1.stderr.on('data', (data) => {
+            console.error('Python stderr:', data.toString());
+          });
+
+        python1.on('close', (code) => {
+            console.log('Python process exited with code:', code);
+            console.log('Raw Python output:', result); // Check this output
+            if (code === 0) {
+                try {
+                    console.log(result)
+                    const parsedResult = JSON.parse(result);
+                    res.status(200).json(parsedResult); // Properly send JSON response
+                } catch (e) {
+                    console.error('Erro ao processar o resultado:', e);
+                    res.status(500).send('Erro ao processar o embedding.');
+                }
+            } else {
+                res.status(500).send('Falha ao gerar o embedding.');
+            }
+        });
+    });
+    
+    req.pipe(busboy);
+});
+
+
 
 app.post('/jpg', (req, res, next) => {
     //console.log(req.body); // This will log the parsed JSON
@@ -146,10 +400,11 @@ app.post('/jpg', (req, res, next) => {
   
     // Read and display the file data on console
     //console.log(req.body.image_buffer);  
-    var mybuff = Buffer.from(req.body.csv);
-    var int8view = new Uint8Array(req.body.csv);
+    var mybuff = Buffer.from(req.body.img);
+    var int8view = new Uint8Array(req.body.img);
     writer.write(mybuff);
 });
+*/
 
 var server = app.listen(3001, () => {
     console.log("Serve ris running");

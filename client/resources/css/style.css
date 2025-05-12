@@ -249,7 +249,11 @@ progress::before {
     font-size: 20px;
     font-weight: 300;
     color: whitesmoke;
- }
+}
+ progress[data-status="loaded"]::before {
+    content: "Loaded: " attr(value) "%";
+    color: lightgreen;
+  }
 progress[value]
 {
     width:800px;
@@ -259,4 +263,20 @@ progress[value]
     border-color: #eee;
     border-radius: 15px;
     position: relative;
+}
+
+.ball {
+width: 20px;
+height: 20px;
+border-radius: 50%;
+display: inline-block;
+margin: 5px;
+}
+
+.green {
+background-color: green;
+}
+
+.red {
+background-color: red;
 }

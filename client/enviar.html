@@ -40,7 +40,7 @@
             <div class="Desktop1" style="display: flex; align-items: center; justify-content: center; width: 2440px; height: 1440px; position: relative;">
                 <body>
                     <img class="Logo" style="width: 204px; height: 204px; left: 50px; top: -400px; position: relative;" src="./resources/images/labic.jpg" />
-                    <div class="PGinaPesquisaDatasetsLabic" style="width: 517px; left: 200px; top: -400px; position: relative; text-align: center; color: white; font-size: 64px; font-family: Inria Serif; font-weight: 700; word-wrap: break-word">Página de envio datasets LABIC</div>
+                    <div class="PGinaPesquisaDatasetsLabic" style="width: 517px; left: 200px; top: -400px; position: relative; text-align: center; color: white; font-size: 64px; font-family: Inria Serif; font-weight: 700; word-wrap: break-word">Pesquisa com imagem</div>
                     <div class="SombraLogo" style="left:-700px; z-index:-999;"></div>
 
                     <div class="container" style="width: 1500px; top: 600px; position: absolute; text-align: center;">
@@ -48,14 +48,20 @@
                                 <input class="Rectangle68" type="text" id="header" name="header" placeholder="Envie um arquivo de dataset no formato .csv" />
                                 <!-- 
                                 <h1 id="output"></h1>
-                                -->
+                                
                                 <input type="file" id="file" accept=".csv, .txt, .json" />
+                                -->
+                                <input type="file" id="file" accept=".png, .jpeg, .jpg" />
+                                
                             </body>
-                            <br>
-                            <button class="button navigation" onclick="Dialog()" id="buttonFile" >Buscar</button>
                             <br><br>
-                            <progress id="progressBar" value="0" max="100" ></progress>
-                            <br>
+                            <button class="button navigation" type="button" id="buttonFilePesquisarImagem" >Pesquisar Imagem</button>
+                            <button class="button navigation" type="button" id="buttonFile" >Upload Imagem</button>
+                            <button class="button navigation" type="button" id="buttonFilePesquisarTexto" >Pesquisar Texto</button>
+                            <br><br><br><br>
+                            <progress id="progressBar" value="0" max="100" data-status="loading"></progress>
+                            <br><br>
+                            <div id="statusBall" class="ball red"></div>
                             <h3 id="status" style="color:white;"></h3>
                     </div>
                 
@@ -70,7 +76,10 @@
                     <h1 style="opacity: 0;" id="datasets" name="datasets"></h1>
                     -->
 
-                    <script src="../node_modules/axios/dist/axios.min.js"></script>
+                    <!--<script src="../node_modules/axios/dist/axios.min.js"></script>
+                    <script src="./dist/enviar_bundle.js"></script>
+                    -->
+                    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
                     <script src="./dist/enviar_bundle.js"></script>
                     <!--<script type="text/javascript" src="./enviar.js"></script>
                     <script type="module" src="./enviar.js"></script>-->
